@@ -14,9 +14,9 @@ export interface TMoviesResponse {
   total_results: number;
 }
 
-export type MovieCardProps = {
+export interface MovieCardProps {
   movie: TMovie;
-};
+}
 
 // Define the API response structure
 export interface MovieResponse {
@@ -24,4 +24,15 @@ export interface MovieResponse {
   results: TMovie[];
   total_pages: number;
   total_results: number;
+}
+
+export interface Genre {
+  id: number;
+  name: string;
+}
+
+export interface Actor {
+  id: number;
+  name: string;
+  profile_path: string | null;
 }
