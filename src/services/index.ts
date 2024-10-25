@@ -47,7 +47,7 @@ export const GetMovieCasts = async (movieId: string) => {
       `/movie/${movieId}/credits?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
     );
 
-    return data; // This should include `cast` property
+    return data;
   } catch (error: any) {
     throw new Error(error);
   }

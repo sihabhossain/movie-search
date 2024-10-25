@@ -5,14 +5,14 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useGetMovieCasts, useGetMovieDetails } from "@/hooks";
 import { Actor, Genre } from "@/types";
-
-// Define types for the movie details and cast
+import { useDarkMode } from "@/contexts/DarkModeContext";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const MovieDetailsPage: React.FC = () => {
+  const { darkMode } = useDarkMode();
   const params = useParams();
-  const movieId = params?.id as string; // Ensure movieId is treated as a string
+  const movieId = params?.id as string;
 
-  // Get movie details and cast with appropriate error handling
   const {
     data: movieDetails,
     isPending: loadingMovie,
@@ -26,10 +26,8 @@ const MovieDetailsPage: React.FC = () => {
 
   const cast = castResponse?.cast;
 
-  console.log(cast);
-
   // Loading and error states
-  if (loadingMovie || loadingCast) return <div>Loading...</div>;
+  if (loadingMovie || loadingCast) return <LoadingSpinner />;
   if (movieError)
     return <div>Error fetching movie details: {movieError.message}</div>;
   if (castError) return <div>Error fetching cast: {castError.message}</div>;
@@ -38,7 +36,11 @@ const MovieDetailsPage: React.FC = () => {
   const { title, overview, genres, release_date, poster_path } = movieDetails;
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white py-10 px-4">
+    <div
+      className={`min-h-screen ${
+        darkMode ? "bg-gray-900" : "bg-white"
+      } text-white py-10 px-4`}
+    >
       <div className="max-w-4xl mx-auto flex flex-col md:flex-row">
         {/* Movie Poster */}
         <div className="md:w-1/3 mb-6 md:mb-0">
@@ -54,7 +56,7 @@ const MovieDetailsPage: React.FC = () => {
         {/* Movie Info */}
         <div className="md:w-2/3 md:pl-6">
           <h1 className="text-4xl font-bold mb-4">{title}</h1>
-          <p className="text-lg text-gray-300 mb-4">
+          <p className="text-lg mb-4">
             Release Date: {new Date(release_date).toLocaleDateString()}
           </p>
           <div className="mb-4">
@@ -63,7 +65,9 @@ const MovieDetailsPage: React.FC = () => {
               {genres?.map((genre: Genre) => (
                 <li
                   key={genre.id}
-                  className="bg-purple-600 text-white rounded-full px-3 py-1 mr-2 mb-2"
+                  className={`rounded-full px-3 py-1 mr-2 mb-2 ${
+                    darkMode ? "bg-purple-600" : "bg-purple-300"
+                  } text-white`}
                 >
                   {genre.name}
                 </li>
@@ -71,7 +75,9 @@ const MovieDetailsPage: React.FC = () => {
             </ul>
           </div>
           <h2 className="text-xl font-semibold mb-2">Overview:</h2>
-          <p className="text-gray-300 mb-4">{overview}</p>
+          <p className={`mb-4 ${darkMode ? "text-gray-300" : "text-gray-800"}`}>
+            {overview}
+          </p>
           <div>
             <h2 className="text-xl font-semibold mb-2">Cast:</h2>
             <ul className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -86,7 +92,13 @@ const MovieDetailsPage: React.FC = () => {
                       className="rounded-full mr-2"
                     />
                   )}
-                  <span className="text-gray-300">{actor.name}</span>
+                  <span
+                    className={`text-gray-300 ${
+                      darkMode ? "text-gray-300" : "text-gray-800"
+                    }`}
+                  >
+                    {actor.name}
+                  </span>
                 </li>
               ))}
             </ul>

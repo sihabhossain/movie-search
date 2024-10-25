@@ -7,6 +7,7 @@ import { Input } from "./ui/input";
 import { Sun, Moon, Menu, X } from "lucide-react";
 import { useDarkMode } from "@/contexts/DarkModeContext";
 import { useSearch } from "@/contexts/SearchProvider";
+import Link from "next/link";
 
 type SearchFormData = {
   searchQuery: string;
@@ -17,10 +18,10 @@ const Navbar: React.FC = () => {
   const { setSearchQuery } = useSearch();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const { register, reset } = useForm<SearchFormData>();
+  const { register } = useForm<SearchFormData>();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value); // Set the search query as the user types
+    setSearchQuery(event.target.value);
   };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -32,7 +33,9 @@ const Navbar: React.FC = () => {
       } shadow-md`}
     >
       <div className="container mx-auto flex justify-between items-center">
-        <h1 className="text-2xl font-bold">MovieSearch</h1>
+        <Link href={"/"} className="text-2xl font-bold">
+          MovieSearch
+        </Link>
         <button onClick={toggleMenu} className="md:hidden">
           {isMenuOpen ? <X /> : <Menu />}
         </button>
