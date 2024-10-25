@@ -1,3 +1,4 @@
+// src/components/Navbar.tsx
 "use client";
 
 import React, { useState } from "react";
@@ -5,6 +6,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { Input } from "./ui/input";
 import { Sun, Moon, Menu, X } from "lucide-react";
 import { useDarkMode } from "@/contexts/DarkModeContext";
+import { useSearch } from "@/contexts/SearchProvider";
 
 type SearchFormData = {
   searchQuery: string;
@@ -12,12 +14,13 @@ type SearchFormData = {
 
 const Navbar: React.FC = () => {
   const { darkMode, toggleDarkMode } = useDarkMode();
+  const { setSearchQuery } = useSearch();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const { register, handleSubmit, reset } = useForm<SearchFormData>();
-  const onSubmit: SubmitHandler<SearchFormData> = (data) => {
-    console.log("Searching for:", data.searchQuery);
-    reset(); // Optional: Reset search field after submitting
+  const { register, reset } = useForm<SearchFormData>();
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value); // Set the search query as the user types
   };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -29,27 +32,21 @@ const Navbar: React.FC = () => {
       } shadow-md`}
     >
       <div className="container mx-auto flex justify-between items-center">
-        {/* Logo */}
         <h1 className="text-2xl font-bold">MovieSearch</h1>
-
-        {/* Toggle Button for Mobile */}
         <button onClick={toggleMenu} className="md:hidden">
           {isMenuOpen ? <X /> : <Menu />}
         </button>
-
-        {/* Desktop Search Bar & Links */}
         <div className="hidden md:flex items-center flex-1 mx-4">
-          <form onSubmit={handleSubmit(onSubmit)} className="flex w-full">
+          <form className="flex w-full" onSubmit={(e) => e.preventDefault()}>
             <Input
               {...register("searchQuery")}
               type="text"
               placeholder="Search for movies..."
+              onChange={handleInputChange} // Call this function on change
               className="lg:w-[30%] lg:focus:w-[60%] transition-all duration-500 ease-in-out p-2 rounded-md border border-gray-300 dark:bg-gray-800 dark:text-white"
             />
           </form>
         </div>
-
-        {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-4">
           <a href="/wishlist" className="hover:underline">
             Wishlist
@@ -60,17 +57,17 @@ const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden flex flex-col items-center gap-4 mt-4">
           <form
-            onSubmit={handleSubmit(onSubmit)}
             className="w-full flex justify-center"
+            onSubmit={(e) => e.preventDefault()}
           >
             <Input
               {...register("searchQuery")}
               type="text"
               placeholder="Search for movies..."
+              onChange={handleInputChange} // Call this function on change
               className="w-[90%] p-2 rounded-md border border-gray-300 dark:bg-gray-800 dark:text-white"
             />
           </form>
