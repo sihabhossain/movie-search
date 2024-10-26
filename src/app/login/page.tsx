@@ -1,11 +1,11 @@
 "use client";
 
-import { useDarkMode } from "@/contexts/DarkModeContext";
 import React from "react";
 import { useForm } from "react-hook-form";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useDarkModeStore } from "@/stores/darkModeStore"; // Import Zustand store
 
 type LoginFormInputs = {
   username: string;
@@ -18,8 +18,7 @@ const LoginPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormInputs>();
-  const { darkMode } = useDarkMode();
-
+  const { darkMode } = useDarkModeStore(); // Use Zustand store for dark mode
   const router = useRouter();
 
   const onSubmit = (data: LoginFormInputs) => {

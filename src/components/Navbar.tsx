@@ -1,21 +1,20 @@
-// src/components/Navbar.tsx
 "use client";
 
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Input } from "./ui/input";
 import { Sun, Moon, Menu, X } from "lucide-react";
-import { useDarkMode } from "@/contexts/DarkModeContext";
-import { useSearch } from "@/contexts/SearchProvider";
+import { useSearchStore } from "@/stores/searchStore"; // Import Zustand store
 import Link from "next/link";
+import { useDarkModeStore } from "@/stores/darkModeStore";
 
 type SearchFormData = {
   searchQuery: string;
 };
 
 const Navbar: React.FC = () => {
-  const { darkMode, toggleDarkMode } = useDarkMode();
-  const { setSearchQuery } = useSearch();
+  const { darkMode, toggleDarkMode } = useDarkModeStore();
+  const { setSearchQuery } = useSearchStore(); // Access Zustand store
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const { register } = useForm<SearchFormData>();
@@ -45,7 +44,7 @@ const Navbar: React.FC = () => {
               {...register("searchQuery")}
               type="text"
               placeholder="Search for movies..."
-              onChange={handleInputChange} // Call this function on change
+              onChange={handleInputChange}
               className="lg:w-[30%] lg:focus:w-[60%] transition-all duration-500 ease-in-out p-2 rounded-md border border-gray-300 dark:bg-gray-800 dark:text-white"
             />
           </form>
@@ -70,7 +69,7 @@ const Navbar: React.FC = () => {
               {...register("searchQuery")}
               type="text"
               placeholder="Search for movies..."
-              onChange={handleInputChange} // Call this function on change
+              onChange={handleInputChange}
               className="w-[90%] p-2 rounded-md border border-gray-300 dark:bg-gray-800 dark:text-white"
             />
           </form>

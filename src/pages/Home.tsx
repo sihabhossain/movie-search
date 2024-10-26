@@ -4,13 +4,13 @@
 
 import React, { useState } from "react";
 import MovieCard from "@/components/MovieCard";
-import { useDarkMode } from "@/contexts/DarkModeContext";
-import { useSearch } from "@/contexts/SearchProvider";
 import { useGetPopularMovies, useSearchMovies } from "@/hooks";
+import { useDarkModeStore } from "@/stores/darkModeStore";
+import { useSearchStore } from "@/stores/searchStore";
 
 export const HomePage: React.FC = () => {
-  const { darkMode } = useDarkMode();
-  const { searchQuery } = useSearch();
+  const { darkMode } = useDarkModeStore();
+  const { searchQuery } = useSearchStore();
 
   // Pagination state
   const [page, setPage] = useState(1);

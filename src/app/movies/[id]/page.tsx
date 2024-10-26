@@ -9,11 +9,11 @@ import {
   useGetMovieRecommendations,
 } from "@/hooks";
 import { Actor, Recommendation, TMovie } from "@/types";
-import { useDarkMode } from "@/contexts/DarkModeContext";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { useDarkModeStore } from "@/stores/darkModeStore";
 
 const MovieDetailsPage: React.FC = () => {
-  const { darkMode } = useDarkMode();
+  const { darkMode } = useDarkModeStore();
   const params = useParams();
   const movieId = params?.id as string;
 
