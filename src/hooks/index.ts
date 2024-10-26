@@ -1,7 +1,7 @@
-// src/hooks/index.ts
 import {
   GetMovieCasts,
   GetMovieDetails,
+  GetMovieRecommendations,
   GetPopularMovies,
   SearchMovies,
 } from "@/services";
@@ -20,11 +20,11 @@ export const useSearchMovies = (query: string, page: number) => {
   return useQuery({
     queryKey: ["SEARCH_MOVIES", query, page],
     queryFn: () => SearchMovies(query, page),
-    enabled: !!query, // Only run the query if the query string is truthy
+    enabled: !!query,
   });
 };
 
-// Hook to get popular movies with pagination
+// how to get movie details
 export const useGetMovieDetails = (movieId: string) => {
   return useQuery({
     queryKey: ["GET_DETAILS"],
@@ -32,10 +32,18 @@ export const useGetMovieDetails = (movieId: string) => {
   });
 };
 
-// Hook to get popular movies with pagination
+// how to get movie casts
 export const useGetMovieCasts = (movieId: string) => {
   return useQuery({
     queryKey: ["GET_CASTS"],
     queryFn: () => GetMovieCasts(movieId),
+  });
+};
+
+// how to get movie recommendations
+export const useGetMovieRecommendations = (movieId: string) => {
+  return useQuery({
+    queryKey: ["GET_RECOMMENDATIONS"],
+    queryFn: () => GetMovieRecommendations(movieId),
   });
 };

@@ -36,3 +36,10 @@ export interface Actor {
   name: string;
   profile_path: string | null;
 }
+
+export interface Recommendation {
+  id: number;
+  title: string;
+  poster_path: string | null;
+  release_date: string;
+}

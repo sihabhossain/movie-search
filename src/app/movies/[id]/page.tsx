@@ -3,8 +3,12 @@
 import React from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { useGetMovieCasts, useGetMovieDetails } from "@/hooks";
-import { Actor, Genre } from "@/types";
+import {
+  useGetMovieCasts,
+  useGetMovieDetails,
+  useGetMovieRecommendations,
+} from "@/hooks";
+import { Actor, Genre, Recommendation } from "@/types";
 import { useDarkMode } from "@/contexts/DarkModeContext";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
@@ -18,19 +22,32 @@ const MovieDetailsPage: React.FC = () => {
     isPending: loadingMovie,
     error: movieError,
   } = useGetMovieDetails(movieId);
+
   const {
     data: castResponse,
     isPending: loadingCast,
     error: castError,
   } = useGetMovieCasts(movieId);
 
+  const {
+    data: recommendationResponse,
+    isPending: loadingRecommendation,
+    error: recommendationError,
+  } = useGetMovieRecommendations(movieId);
+
   const cast = castResponse?.cast;
+  const recommendations = recommendationResponse?.results;
 
   // Loading and error states
-  if (loadingMovie || loadingCast) return <LoadingSpinner />;
+  if (loadingMovie || loadingCast || loadingRecommendation)
+    return <LoadingSpinner />;
   if (movieError)
     return <div>Error fetching movie details: {movieError.message}</div>;
   if (castError) return <div>Error fetching cast: {castError.message}</div>;
+  if (recommendationError)
+    return (
+      <div>Error fetching recommendations: {recommendationError.message}</div>
+    );
   if (!movieDetails) return <div>No movie details found.</div>;
 
   const { title, overview, genres, release_date, poster_path } = movieDetails;
@@ -103,6 +120,32 @@ const MovieDetailsPage: React.FC = () => {
               ))}
             </ul>
           </div>
+        </div>
+      </div>
+
+      {/* Movie Recommendations */}
+      <div className="mt-10 max-w-4xl mx-auto">
+        <h2 className="text-3xl font-semibold mb-4">Recommended Movies</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {recommendations?.slice(0, 8).map((recommendation : Recommendation) => (
+            <div
+              key={recommendation.id}
+              className="bg-gray-800 rounded-lg shadow-lg p-4"
+            >
+              <Image
+                src={`https://image.tmdb.org/t/p/w500${recommendation.poster_path}`}
+                alt={recommendation.title}
+                width={200}
+                height={300}
+                className="rounded-lg mb-2"
+              />
+              <h3 className="text-lg font-semibold">{recommendation.title}</h3>
+              <p className="text-sm text-gray-400">
+                Release Date:{" "}
+                {new Date(recommendation.release_date).toLocaleDateString()}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </div>

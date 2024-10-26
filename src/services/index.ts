@@ -52,3 +52,15 @@ export const GetMovieCasts = async (movieId: string) => {
     throw new Error(error);
   }
 };
+
+export const GetMovieRecommendations = async (movieId: string) => {
+  try {
+    const { data } = await axiosInstance.get(
+      `/movie/${movieId}/recommendations?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
+    );
+
+    return data;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
