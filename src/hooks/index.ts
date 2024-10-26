@@ -1,4 +1,10 @@
 import {
+  TMovieCastsSchema,
+  TMovieDetailsSchema,
+  TMovieRecommendationsSchema,
+  TMoviesResponseSchema,
+} from "@/schemas/movieSchema";
+import {
   GetMovieCasts,
   GetMovieDetails,
   GetMovieRecommendations,
@@ -11,7 +17,10 @@ import { useQuery } from "@tanstack/react-query";
 export const useGetPopularMovies = (page: number) => {
   return useQuery({
     queryKey: ["POPULAR_MOVIES", page],
-    queryFn: () => GetPopularMovies(page),
+    queryFn: async () => {
+      const data = await GetPopularMovies(page);
+      return TMoviesResponseSchema.parse(data); // Validate data
+    },
   });
 };
 
@@ -19,31 +28,43 @@ export const useGetPopularMovies = (page: number) => {
 export const useSearchMovies = (query: string, page: number) => {
   return useQuery({
     queryKey: ["SEARCH_MOVIES", query, page],
-    queryFn: () => SearchMovies(query, page),
+    queryFn: async () => {
+      const data = await SearchMovies(query, page);
+      return TMoviesResponseSchema.parse(data); // Validate data
+    },
     enabled: !!query,
   });
 };
 
-// how to get movie details
+// Hook to get movie details
 export const useGetMovieDetails = (movieId: string) => {
   return useQuery({
-    queryKey: ["GET_DETAILS"],
-    queryFn: () => GetMovieDetails(movieId),
+    queryKey: ["GET_DETAILS", movieId],
+    queryFn: async () => {
+      const data = await GetMovieDetails(movieId);
+      return TMovieDetailsSchema.parse(data); // Validate data
+    },
   });
 };
 
-// how to get movie casts
+// Hook to get movie casts
 export const useGetMovieCasts = (movieId: string) => {
   return useQuery({
-    queryKey: ["GET_CASTS"],
-    queryFn: () => GetMovieCasts(movieId),
+    queryKey: ["GET_CASTS", movieId],
+    queryFn: async () => {
+      const data = await GetMovieCasts(movieId);
+      return TMovieCastsSchema.parse(data); // Validate data
+    },
   });
 };
 
-// how to get movie recommendations
+// Hook to get movie recommendations
 export const useGetMovieRecommendations = (movieId: string) => {
   return useQuery({
-    queryKey: ["GET_RECOMMENDATIONS"],
-    queryFn: () => GetMovieRecommendations(movieId),
+    queryKey: ["GET_RECOMMENDATIONS", movieId],
+    queryFn: async () => {
+      const data = await GetMovieRecommendations(movieId);
+      return TMovieRecommendationsSchema.parse(data); // Validate data
+    },
   });
 };

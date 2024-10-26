@@ -64,6 +64,7 @@ const LoginPage = () => {
                   : "text-gray-900 bg-gray-100 border-gray-300"
               } focus:outline-none focus:ring-2 focus:ring-blue-500`}
               placeholder="Enter your username"
+              defaultValue={"mock@gmail.com"}
             />
             {errors.username && (
               <p className="text-red-500 text-xs mt-1">
@@ -88,6 +89,7 @@ const LoginPage = () => {
                   : "text-gray-900 bg-gray-100 border-gray-300"
               } focus:outline-none focus:ring-2 focus:ring-blue-500`}
               placeholder="Enter your password"
+              defaultValue={"mock123"}
             />
             {errors.password && (
               <p className="text-red-500 text-xs mt-1">
