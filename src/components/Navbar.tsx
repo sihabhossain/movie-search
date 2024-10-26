@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Input } from "./ui/input";
 import { Sun, Moon, Menu, X } from "lucide-react";
 import { useDarkMode } from "@/contexts/DarkModeContext";

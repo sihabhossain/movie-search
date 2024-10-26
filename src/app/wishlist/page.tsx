@@ -1,11 +1,11 @@
-import WishlistPage from "@/pages/WishList";
+import WishList from "@/pages/WishList";
 import React from "react";
 
 const page = () => {
   return (
-    <>
-      <WishlistPage />
-    </>
+    <div>
+      <WishList />
+    </div>
   );
 };
 

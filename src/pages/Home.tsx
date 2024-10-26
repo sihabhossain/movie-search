@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-extra-non-null-assertion */
+
 "use client";
 
 import React, { useState } from "react";
@@ -5,7 +7,6 @@ import MovieCard from "@/components/MovieCard";
 import { useDarkMode } from "@/contexts/DarkModeContext";
 import { useSearch } from "@/contexts/SearchProvider";
 import { useGetPopularMovies, useSearchMovies } from "@/hooks";
-import { TMovie } from "@/types";
 
 export const HomePage: React.FC = () => {
   const { darkMode } = useDarkMode();
@@ -15,12 +16,8 @@ export const HomePage: React.FC = () => {
   const [page, setPage] = useState(1);
 
   // Fetch data
-  const { data: popularMovies, isPending: loadingPopular } =
-    useGetPopularMovies(page);
-  const { data: searchResults, isPending: loadingSearch } = useSearchMovies(
-    searchQuery,
-    page
-  );
+  const { data: popularMovies } = useGetPopularMovies(page);
+  const { data: searchResults } = useSearchMovies(searchQuery, page);
 
   // Total pages for popular movies or search results
   const totalPages = searchQuery
@@ -57,10 +54,10 @@ export const HomePage: React.FC = () => {
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-y-6 mb-10">
-          {(searchResults?.results.length > 0
-            ? searchResults.results
+          {(searchResults!?.results.length > 0
+            ? searchResults!.results
             : popularMovies?.results || []
-          ).map((movie: TMovie) => (
+          ).map((movie) => (
             <div className="flex justify-center" key={movie.id}>
               <MovieCard movie={movie} />
             </div>

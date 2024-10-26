@@ -7,6 +7,7 @@ import React, {
   useContext,
   ReactNode,
 } from "react";
+import Cookies from "js-cookie"; // Import js-cookie
 
 interface DarkModeContextProps {
   darkMode: boolean;
@@ -20,14 +21,14 @@ const DarkModeContext = createContext<DarkModeContextProps | undefined>(
 export const DarkModeProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  // Initialize state based on localStorage or default to false
+  // Initialize state based on cookies or default to false
   const [darkMode, setDarkMode] = useState<boolean>(() => {
-    return localStorage.getItem("darkMode") === "true";
+    return Cookies.get("darkMode") === "true"; // Get initial state from cookies
   });
 
-  // Update localStorage and apply the dark class to <html> element
+  // Update cookies and apply the dark class to <html> element
   useEffect(() => {
-    localStorage.setItem("darkMode", darkMode.toString());
+    Cookies.set("darkMode", darkMode.toString(), { expires: 7 }); // Save to cookies for 7 days
     document.documentElement.classList.toggle("dark", darkMode);
   }, [darkMode]);
 

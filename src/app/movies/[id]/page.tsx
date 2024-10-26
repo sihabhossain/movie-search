@@ -8,7 +8,7 @@ import {
   useGetMovieDetails,
   useGetMovieRecommendations,
 } from "@/hooks";
-import { Actor, Genre, Recommendation } from "@/types";
+import { Actor, Recommendation, TMovie } from "@/types";
 import { useDarkMode } from "@/contexts/DarkModeContext";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
@@ -50,7 +50,8 @@ const MovieDetailsPage: React.FC = () => {
     );
   if (!movieDetails) return <div>No movie details found.</div>;
 
-  const { title, overview, genres, release_date, poster_path } = movieDetails;
+  // Destructure the properties including genres
+  const { title, overview, release_date, poster_path } = movieDetails as TMovie;
 
   return (
     <div
@@ -76,21 +77,7 @@ const MovieDetailsPage: React.FC = () => {
           <p className="text-lg mb-4">
             Release Date: {new Date(release_date).toLocaleDateString()}
           </p>
-          <div className="mb-4">
-            <h2 className="text-xl font-semibold mb-2">Genres:</h2>
-            <ul className="flex flex-wrap">
-              {genres?.map((genre: Genre) => (
-                <li
-                  key={genre.id}
-                  className={`rounded-full px-3 py-1 mr-2 mb-2 ${
-                    darkMode ? "bg-purple-600" : "bg-purple-300"
-                  } text-white`}
-                >
-                  {genre.name}
-                </li>
-              ))}
-            </ul>
-          </div>
+
           <h2 className="text-xl font-semibold mb-2">Overview:</h2>
           <p className={`mb-4 ${darkMode ? "text-gray-300" : "text-gray-800"}`}>
             {overview}
@@ -127,25 +114,29 @@ const MovieDetailsPage: React.FC = () => {
       <div className="mt-10 max-w-4xl mx-auto">
         <h2 className="text-3xl font-semibold mb-4">Recommended Movies</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {recommendations?.slice(0, 8).map((recommendation : Recommendation) => (
-            <div
-              key={recommendation.id}
-              className="bg-gray-800 rounded-lg shadow-lg p-4"
-            >
-              <Image
-                src={`https://image.tmdb.org/t/p/w500${recommendation.poster_path}`}
-                alt={recommendation.title}
-                width={200}
-                height={300}
-                className="rounded-lg mb-2"
-              />
-              <h3 className="text-lg font-semibold">{recommendation.title}</h3>
-              <p className="text-sm text-gray-400">
-                Release Date:{" "}
-                {new Date(recommendation.release_date).toLocaleDateString()}
-              </p>
-            </div>
-          ))}
+          {recommendations
+            ?.slice(0, 8)
+            .map((recommendation: Recommendation) => (
+              <div
+                key={recommendation.id}
+                className="bg-gray-800 rounded-lg shadow-lg p-4"
+              >
+                <Image
+                  src={`https://image.tmdb.org/t/p/w500${recommendation.poster_path}`}
+                  alt={recommendation.title}
+                  width={200}
+                  height={300}
+                  className="rounded-lg mb-2"
+                />
+                <h3 className="text-lg font-semibold">
+                  {recommendation.title}
+                </h3>
+                <p className="text-sm text-gray-400">
+                  Release Date:{" "}
+                  {new Date(recommendation.release_date).toLocaleDateString()}
+                </p>
+              </div>
+            ))}
         </div>
       </div>
     </div>

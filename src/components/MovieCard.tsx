@@ -9,10 +9,11 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { MovieCardProps } from "@/types";
+import { MovieCardProps, TMovie } from "@/types";
 import Link from "next/link";
 import { Heart } from "lucide-react"; // Ensure you have this icon library installed
 import { toast } from "sonner";
+import Cookies from "js-cookie"; // Import js-cookie
 
 const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
   const [isInWishlist, setIsInWishlist] = useState<boolean>(false);
@@ -23,11 +24,11 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
       ? `${movie.overview.substring(0, maxDescriptionLength)}...`
       : movie.overview;
 
-  // Check local storage for existing wishlist state on mount
+  // Check cookies for existing wishlist state on mount
   useEffect(() => {
-    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+    const wishlist = JSON.parse(Cookies.get("wishlist") || "[]");
     const isMovieInWishlist = wishlist.some(
-      (item: any) => item.id === movie.id
+      (item: TMovie) => item.id === movie.id
     );
     setIsInWishlist(isMovieInWishlist);
   }, [movie.id]);
@@ -35,23 +36,23 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
   // Function to handle adding/removing movie to wishlist
   const handleWishlistToggle = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent triggering the Link
-    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+    const wishlist = JSON.parse(Cookies.get("wishlist") || "[]");
     const isMovieInWishlist = wishlist.some(
-      (item: any) => item.id === movie.id
+      (item: TMovie) => item.id === movie.id
     );
 
     if (!isMovieInWishlist) {
       // Add movie to wishlist
       wishlist.push(movie);
-      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+      Cookies.set("wishlist", JSON.stringify(wishlist), { expires: 7 }); // Set cookie with expiration
       setIsInWishlist(true);
-      toast.success("Movie added on wishlist");
+      toast.success("Movie added to wishlist");
     } else {
       // Remove movie from wishlist
       const updatedWishlist = wishlist.filter(
-        (item: any) => item.id !== movie.id
+        (item: TMovie) => item.id !== movie.id
       );
-      localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+      Cookies.set("wishlist", JSON.stringify(updatedWishlist), { expires: 7 }); // Update cookie with expiration
       setIsInWishlist(false);
       toast.error("Movie removed from wishlist");
     }
