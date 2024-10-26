@@ -18,7 +18,7 @@ export interface MovieCardProps {
   movie: TMovie;
 }
 
-// Define the API response structure
+
 export interface MovieResponse {
   page: number;
   results: TMovie[];
